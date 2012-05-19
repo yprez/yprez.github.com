@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Yuri Prezument</title><link href="/" rel="alternate"></link><link href="//feeds/General.atom.xml" rel="self"></link><id>/</id><updated>2012-05-19T18:00:00+00:00</updated><entry><title>Setting Up</title><link href="//setting-up.html" rel="alternate"></link><updated>2012-05-19T18:00:00+00:00</updated><author><name>Yuri Prezument</name></author><id>//setting-up.html</id><summary type="html">&lt;p&gt;I decided to set up this blog mainly as an experiment.&lt;/p&gt;
+&lt;p&gt;I might write might write some Python and software dev related posts sometime
+soon.&lt;/p&gt;
+&lt;p&gt;This blog is powered by &lt;a class="reference external" href="http://alexis.notmyidea.org/pelican/"&gt;Pelican&lt;/a&gt;, the posts are written in
+reStructuredText and it's hosted on &lt;a class="reference external" href="http://pages.github.com/"&gt;Github Pages&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I'm keeping the &lt;a class="reference external" href="https://github.com/yprez/blog.yprez.com"&gt;source repository&lt;/a&gt; separate from the &lt;a class="reference external" href="https://github.com/yprez/yprez.github.com"&gt;generated files&lt;/a&gt;
+repository. Committing to the second when it's ready to update.&lt;/p&gt;
+&lt;p&gt;Setting up:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;git submodule add git@github.com:yprez/yprez.github.com.git output
+pelican . --output&lt;span class="o"&gt;=&lt;/span&gt;output --settings&lt;span class="o"&gt;=&lt;/span&gt;settings.py
+
+&lt;span class="nb"&gt;cd &lt;/span&gt;output
+git add .
+git commit -am&lt;span class="s2"&gt;&amp;quot;Set up blog&amp;quot;&lt;/span&gt;
+git push
+&lt;/pre&gt;&lt;/div&gt;
+</summary><category term="python"></category><category term="pelican"></category></entry></feed>
