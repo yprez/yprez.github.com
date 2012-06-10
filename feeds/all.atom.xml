@@ -1,5 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Yuri Prezument</title><link href="/" rel="alternate"></link><link href="//feeds/all.atom.xml" rel="self"></link><id>/</id><updated>2012-05-19T18:00:00+00:00</updated><entry><title>Setting Up</title><link href="//setting-up.html" rel="alternate"></link><updated>2012-05-19T18:00:00+00:00</updated><author><name>Yuri Prezument</name></author><id>//setting-up.html</id><summary type="html">&lt;p&gt;I decided to set up this blog mainly as an experiment.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Yuri Prezument</title><link href="/" rel="alternate"></link><link href="//feeds/all.atom.xml" rel="self"></link><id>/</id><updated>2012-06-10T14:00:00+00:00</updated><entry><title>Running a Bottle app with Gunicorn</title><link href="//running-a-bottle-app-with-gunicorn.html" rel="alternate"></link><updated>2012-06-10T14:00:00+00:00</updated><author><name>Yuri Prezument</name></author><id>//running-a-bottle-app-with-gunicorn.html</id><summary type="html">&lt;p&gt;Recently I wrote a simple web tracker at work. Using the &lt;a class="reference external" href="http://bottlepy.org/"&gt;Bottle&lt;/a&gt;
+microframework.&lt;/p&gt;
+&lt;p&gt;Looking back, maybe I should've used &lt;a class="reference external" href="http://flask.pocoo.org/"&gt;Flask&lt;/a&gt; instead, as I simply don't see
+the reason for stuffing 3,000 lines of code in one file, other than a proof of
+concept. But both frameworks are quite similar, and both have quite good
+documentation.&lt;/p&gt;
+&lt;p&gt;A simple bottle app looks like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;bottle&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;route&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;run&lt;/span&gt;
+
+&lt;span class="nd"&gt;@route&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;index&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;&amp;lt;h1&amp;gt;Hello Bottle!&amp;lt;/h1&amp;gt;&amp;#39;&lt;/span&gt;
+
+&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;host&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;localhost&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;port&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;8080&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;To switch the server to &lt;a class="reference external" href="http://gunicorn.org/"&gt;Gunicorn&lt;/a&gt; replace the last line with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;host&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;localhost&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;port&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;8080&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;gunicorn&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;workers&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;But what if we want to run it using the &lt;tt class="docutils literal"&gt;gunicorn&lt;/tt&gt; executable (to run it with
+an &lt;tt class="docutils literal"&gt;init.d&lt;/tt&gt; script)? Here things became more problematic.&lt;/p&gt;
+&lt;p&gt;I assumed it would be as simple as simple as running &lt;tt class="docutils literal"&gt;gunicorn myapp&lt;/tt&gt;, but it
+was still running the app with the default server.&lt;/p&gt;
+&lt;p&gt;It also turns out that Bottle is completely not googlable, and searching for
+&lt;tt class="docutils literal"&gt;&amp;quot;bottle python gunicorn&amp;quot;&lt;/tt&gt; just returned random crap. After about half an
+hour of digging, the solution turned out to be quite simple... I was missing a
+WSGI &amp;quot;app&amp;quot; object.&lt;/p&gt;
+&lt;p&gt;The finished app looks like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;bottle&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;bottle&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;route&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;run&lt;/span&gt;
+
+&lt;span class="nd"&gt;@route&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;index&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;&amp;lt;h1&amp;gt;Hello Bottle!&amp;lt;/h1&amp;gt;&amp;#39;&lt;/span&gt;
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;__main__&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;host&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;localhost&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;port&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;8080&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;app&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;bottle&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;default_app&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The last line sets the &amp;quot;app&amp;quot; object for the WSGI server to run.&lt;/p&gt;
+&lt;p&gt;Running the test server:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+python hello_bottle.py
+&lt;/pre&gt;
+&lt;p&gt;Running the app with Gunicorn (with 4 workers):&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+gunicorn -w 4 hello_bottle:app
+&lt;/pre&gt;
+&lt;p&gt;Simple enough, but it's still a little annoying that this wasn't available in
+the documentation.&lt;/p&gt;
+&lt;p&gt;For comparison, in Flask, a hello world app looks like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;flask&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Flask&lt;/span&gt;
+&lt;span class="n"&gt;app&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Flask&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;__name__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="nd"&gt;@app.route&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;/&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;hello&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Hello World!&amp;quot;&lt;/span&gt;
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;__main__&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The &amp;quot;app&amp;quot; object is available right away, so we don't have to guess. And the
+first result in Google for &lt;tt class="docutils literal"&gt;&amp;quot;flask gunicorn&amp;quot;&lt;/tt&gt; is a link to the
+&lt;a class="reference external" href="http://flask.pocoo.org/docs/deploying/others/"&gt;official documentation&lt;/a&gt;, describing how to run it with various WSGI servers.&lt;/p&gt;
+&lt;p&gt;In conclusion: Bottle was fun, the application was very easy to build, and runs
+incredibly fast. I think that for the next project that requires a
+microframework I will use Flask instead. Even if just for the sake of
+comparison.&lt;/p&gt;
+</summary><category term="python"></category><category term="bottle"></category><category term="gunicorn"></category></entry><entry><title>Setting Up</title><link href="//setting-up.html" rel="alternate"></link><updated>2012-05-19T18:00:00+00:00</updated><author><name>Yuri Prezument</name></author><id>//setting-up.html</id><summary type="html">&lt;p&gt;I decided to set up this blog mainly as an experiment.&lt;/p&gt;
 &lt;p&gt;I might write might write some Python and software dev related posts sometime
 soon.&lt;/p&gt;
 &lt;p&gt;This blog is powered by &lt;a class="reference external" href="http://alexis.notmyidea.org/pelican/"&gt;Pelican&lt;/a&gt;, the posts are written in

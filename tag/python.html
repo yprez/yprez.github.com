@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Yuri Prezument <small>python</small></title>
+    <title>python</title>
     <meta name="description" content="">
     <meta name="author" content="Yuri Prezument">
 
@@ -57,18 +57,18 @@
     <div class="row">
 
         <div class="span9">
-                
-
-
         
+
+
+
 
 
 
 
     <div class='article'>
         <div class="content-title">
-            <a href=".././setting-up.html"><h1>Setting Up</h1></a>
-            19 May 2012
+            <a href=".././running-a-bottle-app-with-gunicorn.html"><h1>Running a Bottle app with Gunicorn</h1></a>
+            10 Jun 2012
 
 
 by <a class="url fn" href=".././author/Yuri Prezument.html">Yuri Prezument</a>
@@ -76,29 +76,110 @@ by <a class="url fn" href=".././author/Yuri Prezument.html">Yuri Prezument</a>
 
 
 
- 
-        </div>
-        
-        <div><p>I decided to set up this blog mainly as an experiment.</p>
-<p>I might write might write some Python and software dev related posts sometime
-soon.</p>
-<p>This blog is powered by <a class="reference external" href="http://alexis.notmyidea.org/pelican/">Pelican</a>, the posts are written in
-reStructuredText and it's hosted on <a class="reference external" href="http://pages.github.com/">Github Pages</a>.</p>
-<p>I'm keeping the <a class="reference external" href="https://github.com/yprez/blog.yprez.com">source repository</a> separate from the <a class="reference external" href="https://github.com/yprez/yprez.github.com">generated files</a>
-repository. Committing to the second when it's ready to update.</p>
-<p>Setting up:</p>
-<div class="highlight"><pre>git submodule add git@github.com:yprez/yprez.github.com.git output
-pelican . --output<span class="o">=</span>output --settings<span class="o">=</span>settings.py
 
-<span class="nb">cd </span>output
-git add .
-git commit -am<span class="s2">&quot;Set up blog&quot;</span>
-git push
+        </div>
+
+        <div><p>Recently I wrote a simple web tracker at work. Using the <a class="reference external" href="http://bottlepy.org/">Bottle</a>
+microframework.</p>
+<p>Looking back, maybe I should've used <a class="reference external" href="http://flask.pocoo.org/">Flask</a> instead, as I simply don't see
+the reason for stuffing 3,000 lines of code in one file, other than a proof of
+concept. But both frameworks are quite similar, and both have quite good
+documentation.</p>
+<p>A simple bottle app looks like this:</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">bottle</span> <span class="kn">import</span> <span class="n">route</span><span class="p">,</span> <span class="n">run</span>
+
+<span class="nd">@route</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s">&#39;&lt;h1&gt;Hello Bottle!&lt;/h1&gt;&#39;</span>
+
+<span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8080</span><span class="p">)</span>
 </pre></div>
+<p>To switch the server to <a class="reference external" href="http://gunicorn.org/">Gunicorn</a> replace the last line with:</p>
+<div class="highlight"><pre><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8080</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="s">&#39;gunicorn&#39;</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+<p>But what if we want to run it using the <tt class="docutils literal">gunicorn</tt> executable (to run it with
+an <tt class="docutils literal">init.d</tt> script)? Here things became more problematic.</p>
+<p>I assumed it would be as simple as simple as running <tt class="docutils literal">gunicorn myapp</tt>, but it
+was still running the app with the default server.</p>
+<p>It also turns out that Bottle is completely not googlable, and searching for
+<tt class="docutils literal">&quot;bottle python gunicorn&quot;</tt> just returned random crap. After about half an
+hour of digging, the solution turned out to be quite simple... I was missing a
+WSGI &quot;app&quot; object.</p>
+<p>The finished app looks like this:</p>
+<div class="highlight"><pre><span class="kn">import</span> <span class="nn">bottle</span>
+<span class="kn">from</span> <span class="nn">bottle</span> <span class="kn">import</span> <span class="n">route</span><span class="p">,</span> <span class="n">run</span>
+
+<span class="nd">@route</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s">&#39;&lt;h1&gt;Hello Bottle!&lt;/h1&gt;&#39;</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8080</span><span class="p">)</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">bottle</span><span class="o">.</span><span class="n">default_app</span><span class="p">()</span>
+</pre></div>
+<p>The last line sets the &quot;app&quot; object for the WSGI server to run.</p>
+<p>Running the test server:</p>
+<pre class="literal-block">
+python hello_bottle.py
+</pre>
+<p>Running the app with Gunicorn (with 4 workers):</p>
+<pre class="literal-block">
+gunicorn -w 4 hello_bottle:app
+</pre>
+<p>Simple enough, but it's still a little annoying that this wasn't available in
+the documentation.</p>
+<p>For comparison, in Flask, a hello world app looks like this:</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s">&quot;Hello World!&quot;</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+<p>The &quot;app&quot; object is available right away, so we don't have to guess. And the
+first result in Google for <tt class="docutils literal">&quot;flask gunicorn&quot;</tt> is a link to the
+<a class="reference external" href="http://flask.pocoo.org/docs/deploying/others/">official documentation</a>, describing how to run it with various WSGI servers.</p>
+<p>In conclusion: Bottle was fun, the application was very easy to build, and runs
+incredibly fast. I think that for the next project that requires a
+microframework I will use Flask instead. Even if just for the sake of
+comparison.</p>
 </div>
         <hr />
     </div>
 		
+    
+
+
+ 
+
+
+
+
+
+
+    <div class='article'>
+        <a href=".././setting-up.html"><h2>Setting Up</h2></a>
+        <div class= "well small"> 19 May 2012
+
+
+by <a class="url fn" href=".././author/Yuri Prezument.html">Yuri Prezument</a>
+ 
+
+
+
+ </div>
+        <div class="summary"><p>I decided to set up this blog mainly as an experiment.</p>
+<p>I might write might write some Python and software dev related posts sometime
+soon.</p>
+<p>This blog is powered by <a class="reference external" href="http://alexis.notmyidea.org/pelican/">Pelican</a>, the posts are written in
+reStructuredText and it's hosted on <a class="reference external" href="http://pages.github.com/">Github Pages</a>.</p>
+<p>I'm keeping the <a class="reference external" href="https://github.com/yprez/blog.yprez.com">source repository ...</a></p> <a class="btn btn-info xsmall" href=".././setting-up.html">read more</a></div>
+    </div>	
+				
     
         <div class="pagination">
 <ul>
@@ -117,7 +198,6 @@ git push
 </ul>
 </div>
     
-
 
  
 
@@ -184,6 +264,35 @@ git push
             
 
             
+<script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
+<script>
+new TWTR.Widget({
+  version: 2,
+  type: 'profile',
+  rpp: 30,
+  interval: 30000,
+  width: 270,
+  height: 200,
+  theme: {
+    shell: {
+      background: '#fbfbfb',
+      color: '#022222'
+    },
+    tweets: {
+      background: '#fbfbfb',
+      color: '#333333',
+      links: '#0088cc'
+    }
+  },
+  features: {
+    scrollbar: true,
+    loop: false,
+    live: false,
+    behavior: 'all'
+  }
+}).render().setUser('yprez').start();
+</script>
+
 
         </div> 
     </div> 
