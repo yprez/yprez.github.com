@@ -25,7 +25,7 @@ was still running the app with the default server.&lt;/p&gt;
 &lt;tt class="docutils literal"&gt;&amp;quot;bottle python gunicorn&amp;quot;&lt;/tt&gt; just returned random crap. After about half an
 hour of digging, the solution turned out to be quite simple... I was missing a
 WSGI &amp;quot;app&amp;quot; object.&lt;/p&gt;
-&lt;p&gt;The finished app looks like this:&lt;/p&gt;
+&lt;p&gt;Here's the finished app:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;bottle&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;bottle&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;route&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;run&lt;/span&gt;
 
