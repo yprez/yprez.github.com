@@ -67,8 +67,8 @@
 
     <div class='article'>
         <div class="content-title">
-            <a href=".././running-a-bottle-app-with-gunicorn.html"><h1>Running a Bottle app with Gunicorn</h1></a>
-            10 Jun 2012
+            <a href=".././django-bash-completion.html"><h1>Django Bash completion</h1></a>
+            03 Aug 2012
 
 
 by <a class="url fn" href=".././author/Yuri Prezument.html">Yuri Prezument</a>
@@ -79,80 +79,98 @@ by <a class="url fn" href=".././author/Yuri Prezument.html">Yuri Prezument</a>
 
         </div>
 
-        <div><p>Recently I wrote a simple web tracker at work, using the <a class="reference external" href="http://bottlepy.org/">Bottle</a>
-microframework.</p>
-<p>Looking back, maybe I should've used <a class="reference external" href="http://flask.pocoo.org/">Flask</a> instead, as I simply don't see
-the reason for stuffing 3,000 lines of code in one file, other than a proof of
-concept. But both frameworks are quite similar, and both have quite good
-documentation.</p>
-<p>A simple bottle app looks like this:</p>
-<div class="highlight"><pre><span class="kn">from</span> <span class="nn">bottle</span> <span class="kn">import</span> <span class="n">route</span><span class="p">,</span> <span class="n">run</span>
-
-<span class="nd">@route</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s">&#39;&lt;h1&gt;Hello Bottle!&lt;/h1&gt;&#39;</span>
-
-<span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8080</span><span class="p">)</span>
-</pre></div>
-<p>To switch the server to <a class="reference external" href="http://gunicorn.org/">Gunicorn</a> replace the last line with:</p>
-<div class="highlight"><pre><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8080</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="s">&#39;gunicorn&#39;</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-</pre></div>
-<p>But what if we want to run it using the <tt class="docutils literal">gunicorn</tt> executable (to run it with
-an <tt class="docutils literal">init.d</tt> script)? Here things became more problematic.</p>
-<p>I assumed it would be as simple as simple as running <tt class="docutils literal">gunicorn myapp</tt>, but it
-was still running the app with the default server.</p>
-<p>It also turns out that Bottle is completely not googlable, and searching for
-<tt class="docutils literal">&quot;bottle python gunicorn&quot;</tt> just returned random crap. After about half an
-hour of digging, the solution turned out to be quite simple... I was missing a
-WSGI &quot;app&quot; object.</p>
-<p>Here's the finished app:</p>
-<div class="highlight"><pre><span class="kn">import</span> <span class="nn">bottle</span>
-<span class="kn">from</span> <span class="nn">bottle</span> <span class="kn">import</span> <span class="n">route</span><span class="p">,</span> <span class="n">run</span>
-
-<span class="nd">@route</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s">&#39;&lt;h1&gt;Hello Bottle!&lt;/h1&gt;&#39;</span>
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8080</span><span class="p">)</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">bottle</span><span class="o">.</span><span class="n">default_app</span><span class="p">()</span>
-</pre></div>
-<p>The last line sets the &quot;app&quot; object for the WSGI server to run.</p>
-<p>Running the test server:</p>
+        <div><p>A couple of days ago, while browsing the Django repository on Github, I
+discovered the <a class="reference external" href="https://github.com/django/django/blob/master/extras/django_bash_completion">django_bash_completion</a> script (only took me 2 years to
+find it). Shortly after the <cite>mind=blown</cite> moment, I tested it and was
+amazed by the results, or rather by the fact that I never knew it existed,
+although it's referenced in the <a class="reference external" href="https://docs.djangoproject.com/en/dev/ref/django-admin/#bash-completion">docs</a>.</p>
+<p>Installation was really simple, and outlined in the script itself:</p>
 <pre class="literal-block">
-python hello_bottle.py
+# Testing it out without installing
+# =================================
+#
+# To test out the completion without &quot;installing&quot; this, just run this file
+# directly, like so:
+#
+#     . ~/path/to/django_bash_completion
+#
+# Note: There's a dot ('.') at the beginning of that command.
+#
+# After you do that, tab completion will immediately be made available in your
+# current Bash shell. But it won't be available next time you log in.
+#
+# Installing
+# ==========
+#
+# To install this, point to this file from your .bash_profile, like so:
+#
+#     . ~/path/to/django_bash_completion
+#
+# Do the same in your .bashrc if .bashrc doesn't invoke .bash_profile.
+#
+# Settings will take effect the next time you log in.
 </pre>
-<p>Running the app with Gunicorn (with 4 workers):</p>
-<pre class="literal-block">
-gunicorn -w 4 hello_bottle:app
-</pre>
-<p>Simple enough, but it's still a little annoying that this wasn't available in
-the documentation.</p>
-<p>For comparison, in Flask, a hello world app looks like this:</p>
-<div class="highlight"><pre><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
-<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
-
-<span class="nd">@app.route</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s">&quot;Hello World!&quot;</span>
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<p>The result:</p>
+<div class="highlight"><pre><span class="nv">$ </span>python manage.py <span class="o">[</span>TAB<span class="o">]</span>
+cleanup           diffsettings      inspectdb         runfcgi           sqlall
+...
 </pre></div>
-<p>The &quot;app&quot; object is available right away, so we don't have to guess. And the
-first result in Google for <tt class="docutils literal">&quot;flask gunicorn&quot;</tt> is a link to the
-<a class="reference external" href="http://flask.pocoo.org/docs/deploying/others/">official documentation</a>, describing how to run it with various WSGI servers.</p>
-<p>In conclusion: Bottle was fun, the application was very easy to build, and runs
-incredibly fast. I think that for the next project that requires a
-microframework I will use Flask instead. Even if just for the sake of
-comparison.</p>
+<p>Since I have Django projects deployed on almost every VPS that I access,
+I decided to write a small script to install it on a remote machine easily.</p>
+<div class="highlight"><pre><span class="c">#!/bin/bash</span>
+<span class="c"># install_django_bash_completion.sh</span>
+
+<span class="nv">DIR</span><span class="o">=</span>~/scripts
+
+mkdir <span class="nv">$DIR</span>
+wget https://raw.github.com/django/django/master/extras/django_bash_completion -P <span class="nv">$DIR</span>
+<span class="nb">echo</span> -e <span class="s2">&quot;\n\n#Django bash comletion:\nsource $DIR/django_bash_completion&quot;</span> &gt;&gt; ~/.bashrc
+</pre></div>
+<p>And execute it via:</p>
+<pre class="literal-block">
+cat install_django_bash_completion.sh | ssh my.server.com
+</pre>
+<p><strong>Notes:</strong></p>
+<ul class="simple">
+<li>Yes, I know that Zsh auto-completes Django management commands
+(and much more), but I prefer to stick with Bash for now.</li>
+<li>The script is located at <tt class="docutils literal"><span class="pre">site-packages/django/extras</span></tt> when you install
+Django. But I wanted something more generic as it's located in different
+virtualenvs on every machine.</li>
+</ul>
 </div>
         <hr />
     </div>
 		
     
 
+
+ 
+
+
+
+
+
+
+    <div class='article'>
+        <a href=".././running-a-bottle-app-with-gunicorn.html"><h2>Running a Bottle app with Gunicorn</h2></a>
+        <div class= "well small"> 10 Jun 2012
+
+
+by <a class="url fn" href=".././author/Yuri Prezument.html">Yuri Prezument</a>
+
+
+
+
+ </div>
+        <div class="summary"><p>Recently I wrote a simple web tracker at work, using the <a class="reference external" href="http://bottlepy.org/">Bottle</a>
+microframework.</p>
+<p>Looking back, maybe I should've used <a class="reference external" href="http://flask.pocoo.org/">Flask</a> instead, as I simply don't see
+the reason for stuffing 3,000 lines of code in one file, other than a proof of
+concept. But both frameworks are ...</p> <a class="btn btn-info xsmall" href=".././running-a-bottle-app-with-gunicorn.html">read more</a></div>
+    </div>	
+				
+    
 
  
 

@@ -1,5 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Yuri Prezument</title><link href="/" rel="alternate"></link><link href="//feeds/General.atom.xml" rel="self"></link><id>/</id><updated>2012-06-10T14:00:00+00:00</updated><entry><title>Running a Bottle app with Gunicorn</title><link href="//running-a-bottle-app-with-gunicorn.html" rel="alternate"></link><updated>2012-06-10T14:00:00+00:00</updated><author><name>Yuri Prezument</name></author><id>//running-a-bottle-app-with-gunicorn.html</id><summary type="html">&lt;p&gt;Recently I wrote a simple web tracker at work, using the &lt;a class="reference external" href="http://bottlepy.org/"&gt;Bottle&lt;/a&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Yuri Prezument</title><link href="/" rel="alternate"></link><link href="//feeds/General.atom.xml" rel="self"></link><id>/</id><updated>2012-08-03T22:00:00+00:00</updated><entry><title>Django Bash completion</title><link href="//django-bash-completion.html" rel="alternate"></link><updated>2012-08-03T22:00:00+00:00</updated><author><name>Yuri Prezument</name></author><id>//django-bash-completion.html</id><summary type="html">&lt;p&gt;A couple of days ago, while browsing the Django repository on Github, I
+discovered the &lt;a class="reference external" href="https://github.com/django/django/blob/master/extras/django_bash_completion"&gt;django_bash_completion&lt;/a&gt; script (only took me 2 years to
+find it). Shortly after the &lt;cite&gt;mind=blown&lt;/cite&gt; moment, I tested it and was
+amazed by the results, or rather by the fact that I never knew it existed,
+although it's referenced in the &lt;a class="reference external" href="https://docs.djangoproject.com/en/dev/ref/django-admin/#bash-completion"&gt;docs&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Installation was really simple, and outlined in the script itself:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+# Testing it out without installing
+# =================================
+#
+# To test out the completion without &amp;quot;installing&amp;quot; this, just run this file
+# directly, like so:
+#
+#     . ~/path/to/django_bash_completion
+#
+# Note: There's a dot ('.') at the beginning of that command.
+#
+# After you do that, tab completion will immediately be made available in your
+# current Bash shell. But it won't be available next time you log in.
+#
+# Installing
+# ==========
+#
+# To install this, point to this file from your .bash_profile, like so:
+#
+#     . ~/path/to/django_bash_completion
+#
+# Do the same in your .bashrc if .bashrc doesn't invoke .bash_profile.
+#
+# Settings will take effect the next time you log in.
+&lt;/pre&gt;
+&lt;p&gt;The result:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;python manage.py &lt;span class="o"&gt;[&lt;/span&gt;TAB&lt;span class="o"&gt;]&lt;/span&gt;
+cleanup           diffsettings      inspectdb         runfcgi           sqlall
+...
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Since I have Django projects deployed on almost every VPS that I access,
+I decided to write a small script to install it on a remote machine easily.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class="c"&gt;# install_django_bash_completion.sh&lt;/span&gt;
+
+&lt;span class="nv"&gt;DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;~/scripts
+
+mkdir &lt;span class="nv"&gt;$DIR&lt;/span&gt;
+wget https://raw.github.com/django/django/master/extras/django_bash_completion -P &lt;span class="nv"&gt;$DIR&lt;/span&gt;
+&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;quot;\n\n#Django bash comletion:\nsource $DIR/django_bash_completion&amp;quot;&lt;/span&gt; &amp;gt;&amp;gt; ~/.bashrc
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And execute it via:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+cat install_django_bash_completion.sh | ssh my.server.com
+&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Notes:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Yes, I know that Zsh auto-completes Django management commands
+(and much more), but I prefer to stick with Bash for now.&lt;/li&gt;
+&lt;li&gt;The script is located at &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;site-packages/django/extras&lt;/span&gt;&lt;/tt&gt; when you install
+Django. But I wanted something more generic as it's located in different
+virtualenvs on every machine.&lt;/li&gt;
+&lt;/ul&gt;
+</summary><category term="django"></category><category term="python"></category><category term="bash"></category></entry><entry><title>Running a Bottle app with Gunicorn</title><link href="//running-a-bottle-app-with-gunicorn.html" rel="alternate"></link><updated>2012-06-10T14:00:00+00:00</updated><author><name>Yuri Prezument</name></author><id>//running-a-bottle-app-with-gunicorn.html</id><summary type="html">&lt;p&gt;Recently I wrote a simple web tracker at work, using the &lt;a class="reference external" href="http://bottlepy.org/"&gt;Bottle&lt;/a&gt;
 microframework.&lt;/p&gt;
 &lt;p&gt;Looking back, maybe I should've used &lt;a class="reference external" href="http://flask.pocoo.org/"&gt;Flask&lt;/a&gt; instead, as I simply don't see
 the reason for stuffing 3,000 lines of code in one file, other than a proof of
