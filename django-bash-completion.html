@@ -18,7 +18,18 @@
     <link href="./theme/pygments.css" rel="stylesheet">
 
     
-<script>var _gaq=[['_setAccount','UA-31891245-1'],['_trackPageview']];(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.src='//www.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)}(document,'script'))</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31891245-1']);
+  _gaq.push(['_setDomainName', 'yprez.com']); 
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
 
 </head>
 
@@ -74,7 +85,7 @@ by <a class="url fn" href="./author/Yuri Prezument.html">Yuri Prezument</a>
 	
         <div><p>A couple of days ago, while browsing the Django repository on Github, I
 discovered the <a class="reference external" href="https://github.com/django/django/blob/master/extras/django_bash_completion">django_bash_completion</a> script (only took me 2 years to
-find it). Shortly after the <cite>mind=blown</cite> moment, I tested it and was
+find it). Shortly after the <cite>mind=blown</cite> moment I tested it and was
 amazed by the results, or rather by the fact that I never knew it existed,
 although it's referenced in the <a class="reference external" href="https://docs.djangoproject.com/en/dev/ref/django-admin/#bash-completion">docs</a>.</p>
 <p>Installation was really simple, and outlined in the script itself:</p>
