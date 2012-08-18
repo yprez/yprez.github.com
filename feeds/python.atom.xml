@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Yuri Prezument</title><link href="/" rel="alternate"></link><link href="//feeds/python.atom.xml" rel="self"></link><id>/</id><updated>2012-08-03T22:00:00+00:00</updated><entry><title>Django Bash completion</title><link href="//django-bash-completion.html" rel="alternate"></link><updated>2012-08-03T22:00:00+00:00</updated><author><name>Yuri Prezument</name></author><id>//django-bash-completion.html</id><summary type="html">&lt;p&gt;A couple of days ago, while browsing the Django repository on Github, I
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Yuri Prezument</title><link href="http://blog.yprez.com" rel="alternate"></link><link href="http://blog.yprez.com/feeds/python.atom.xml" rel="self"></link><id>http://blog.yprez.com</id><updated>2012-08-03T22:00:00+00:00</updated><entry><title>Django Bash completion</title><link href="http://blog.yprez.com/django-bash-completion.html" rel="alternate"></link><updated>2012-08-03T22:00:00+00:00</updated><author><name>Yuri Prezument</name></author><id>http://blog.yprez.com/django-bash-completion.html</id><summary type="html">&lt;p&gt;A couple of days ago, while browsing the Django repository on Github, I
 discovered the &lt;a class="reference external" href="https://github.com/django/django/blob/master/extras/django_bash_completion"&gt;django_bash_completion&lt;/a&gt; script (only took me 2 years to
 find it). Shortly after the &lt;cite&gt;mind=blown&lt;/cite&gt; moment I tested it and was
 amazed by the results, or rather by the fact that I never knew it existed,
@@ -58,7 +58,7 @@ cat install_django_bash_completion.sh | ssh my.server.com
 Django. But I wanted something more generic as it's located in different
 virtualenvs on every machine.&lt;/li&gt;
 &lt;/ul&gt;
-</summary><category term="django"></category><category term="python"></category><category term="bash"></category></entry><entry><title>Running a Bottle app with Gunicorn</title><link href="//running-a-bottle-app-with-gunicorn.html" rel="alternate"></link><updated>2012-06-10T14:00:00+00:00</updated><author><name>Yuri Prezument</name></author><id>//running-a-bottle-app-with-gunicorn.html</id><summary type="html">&lt;p&gt;Recently I wrote a simple web tracker at work, using the &lt;a class="reference external" href="http://bottlepy.org/"&gt;Bottle&lt;/a&gt;
+</summary><category term="django"></category><category term="python"></category><category term="bash"></category></entry><entry><title>Running a Bottle app with Gunicorn</title><link href="http://blog.yprez.com/running-a-bottle-app-with-gunicorn.html" rel="alternate"></link><updated>2012-06-10T14:00:00+00:00</updated><author><name>Yuri Prezument</name></author><id>http://blog.yprez.com/running-a-bottle-app-with-gunicorn.html</id><summary type="html">&lt;p&gt;Recently I wrote a simple web tracker at work, using the &lt;a class="reference external" href="http://bottlepy.org/"&gt;Bottle&lt;/a&gt;
 microframework.&lt;/p&gt;
 &lt;p&gt;Looking back, maybe I should've used &lt;a class="reference external" href="http://flask.pocoo.org/"&gt;Flask&lt;/a&gt; instead, as I simply don't see
 the reason for stuffing 3,000 lines of code in one file, other than a proof of
@@ -126,7 +126,7 @@ first result in Google for &lt;tt class="docutils literal"&gt;&amp;quot;flask gu
 incredibly fast. I think that for the next project that requires a
 microframework I will use Flask instead. Even if just for the sake of
 comparison.&lt;/p&gt;
-</summary><category term="python"></category><category term="bottle"></category><category term="gunicorn"></category></entry><entry><title>Setting Up</title><link href="//setting-up.html" rel="alternate"></link><updated>2012-05-19T18:00:00+00:00</updated><author><name>Yuri Prezument</name></author><id>//setting-up.html</id><summary type="html">&lt;p&gt;I decided to set up this blog mainly as an experiment.&lt;/p&gt;
+</summary><category term="python"></category><category term="bottle"></category><category term="gunicorn"></category></entry><entry><title>Setting Up</title><link href="http://blog.yprez.com/setting-up.html" rel="alternate"></link><updated>2012-05-19T18:00:00+00:00</updated><author><name>Yuri Prezument</name></author><id>http://blog.yprez.com/setting-up.html</id><summary type="html">&lt;p&gt;I decided to set up this blog mainly as an experiment.&lt;/p&gt;
 &lt;p&gt;I might write might write some Python and software dev related posts sometime
 soon.&lt;/p&gt;
 &lt;p&gt;This blog is powered by &lt;a class="reference external" href="http://alexis.notmyidea.org/pelican/"&gt;Pelican&lt;/a&gt;, the posts are written in
