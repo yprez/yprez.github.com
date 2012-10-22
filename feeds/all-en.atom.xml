@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Yuri Prezument</title><link href="http://blog.yprez.com/" rel="alternate"></link><link href="http://blog.yprez.com/feeds/all-en.atom.xml" rel="self"></link><id>http://blog.yprez.com/</id><updated>2012-10-07T22:00:00+00:00</updated><entry><title>Searching code for "TODO" comments with git grep</title><link href="http://blog.yprez.com/searching-code-for-todo-comments-with-git-grep.html" rel="alternate"></link><updated>2012-10-07T22:00:00+00:00</updated><author><name>Yuri Prezument</name></author><id>tag:blog.yprez.com,2012-10-07:searching-code-for-todo-comments-with-git-grep.html</id><summary type="html">&lt;p&gt;My code, like most code, tends to contain TODO/FIXME comments for things
-I don't want to bother with at the time of writing them. Sometimes these
-tend to pile up. A quick method of finding those is &lt;cite&gt;git grep&lt;/cite&gt;:&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Yuri Prezument</title><link href="http://blog.yprez.com/" rel="alternate"></link><link href="http://blog.yprez.com/feeds/all-en.atom.xml" rel="self"></link><id>http://blog.yprez.com/</id><updated>2012-10-07T22:00:00+00:00</updated><entry><title>Searching code for "TODO" comments with git grep</title><link href="http://blog.yprez.com/searching-code-for-todo-comments-with-git-grep.html" rel="alternate"></link><updated>2012-10-07T22:00:00+00:00</updated><author><name>Yuri Prezument</name></author><id>tag:blog.yprez.com,2012-10-07:searching-code-for-todo-comments-with-git-grep.html</id><summary type="html">&lt;p&gt;My code, like most code, tends to contain TODO/FIXME comments for things that
+I don't want to bother with at the time of writing them. Sometimes, these
+tend to pile up. A quick method of finding them is &lt;cite&gt;git grep&lt;/cite&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;git grep TODO
 &lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Today I was looking for &amp;quot;TODO&amp;quot; annotations in an old project,
-and completely missed a couple of FIXMEs due to being too lazy to grep for
-them. This would have caught them:&lt;/p&gt;
+&lt;p&gt;Today I was looking for &amp;quot;TODO&amp;quot; annotations in an old project and completely
+missed a couple of FIXMEs due to being too lazy to grep for them.
+This would have caught them:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;git grep -e TODO -e FIXME
 &lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;But that's too much typing, so why not make an alias for it?&lt;/p&gt;
+&lt;p&gt;But that's too much typing. So why not make an alias for it?&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;[alias]&lt;/span&gt;
     &lt;span class="na"&gt;todo&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;grep -n -e TODO -e FIXME -e XXX -e OPTIMIZE&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
@@ -18,7 +18,7 @@ them. This would have caught them:&lt;/p&gt;
 celeryconfig.py:7:        &lt;span class="c"&gt;# TODO: find best schedule to avoid query limits&lt;/span&gt;
 models.py:38:    &lt;span class="c"&gt;# FIXME: remove this method soon&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Ok, that was fun, back to work...&lt;/p&gt;
+&lt;p&gt;Ok, that was fun. Back to work...&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Notes:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul class="simple"&gt;
 &lt;li&gt;On a general note - don't let TODOs and FIXMEs pile up in the first

@@ -84,17 +84,17 @@ by <a class="url fn" href="./author/yuri-prezument.html">Yuri Prezument</a>
 
         </div>
 	
-        <div><p>My code, like most code, tends to contain TODO/FIXME comments for things
-I don't want to bother with at the time of writing them. Sometimes these
-tend to pile up. A quick method of finding those is <cite>git grep</cite>:</p>
+        <div><p>My code, like most code, tends to contain TODO/FIXME comments for things that
+I don't want to bother with at the time of writing them. Sometimes, these
+tend to pile up. A quick method of finding them is <cite>git grep</cite>:</p>
 <div class="highlight"><pre><span class="nv">$ </span>git grep TODO
 </pre></div>
-<p>Today I was looking for &quot;TODO&quot; annotations in an old project,
-and completely missed a couple of FIXMEs due to being too lazy to grep for
-them. This would have caught them:</p>
+<p>Today I was looking for &quot;TODO&quot; annotations in an old project and completely
+missed a couple of FIXMEs due to being too lazy to grep for them.
+This would have caught them:</p>
 <div class="highlight"><pre><span class="nv">$ </span>git grep -e TODO -e FIXME
 </pre></div>
-<p>But that's too much typing, so why not make an alias for it?</p>
+<p>But that's too much typing. So why not make an alias for it?</p>
 <div class="highlight"><pre><span class="k">[alias]</span>
     <span class="na">todo</span> <span class="o">=</span> <span class="s">grep -n -e TODO -e FIXME -e XXX -e OPTIMIZE</span>
 </pre></div>
@@ -103,7 +103,7 @@ them. This would have caught them:</p>
 celeryconfig.py:7:        <span class="c"># TODO: find best schedule to avoid query limits</span>
 models.py:38:    <span class="c"># FIXME: remove this method soon</span>
 </pre></div>
-<p>Ok, that was fun, back to work...</p>
+<p>Ok, that was fun. Back to work...</p>
 <p><strong>Notes:</strong></p>
 <ul class="simple">
 <li>On a general note - don't let TODOs and FIXMEs pile up in the first
